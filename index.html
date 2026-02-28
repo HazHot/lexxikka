@@ -786,7 +786,7 @@
 
 <body class="home-theme" onload="initMedia()">
     <div id="start-screen">
-        <div id="start-text">Загружается...</div>
+        <div id="start-text">Идет подгрузка контента страницы, пожалуйста подождите. . .</div>
     </div>
 
     <div class="container">
@@ -964,7 +964,7 @@
             const loadingPercent = Math.floor((loadedAssets / totalAssets) * 100);
             const startText = document.getElementById('start-text');
             if (startText && !assetsLoaded) {
-                startText.textContent = `Загружаем... ${loadingPercent}%`;
+                startText.textContent = `Идет подгрузка контента страницы, пожалуйста подождите. . . ${loadingPercent}%`;
             }
             if (loadedAssets >= totalAssets) {
                 assetsLoaded = true;
