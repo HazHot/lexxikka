@@ -1,2 +1,2 @@
 [ссылочка
-](https://hazhot.github.io/lexxikka/)
+](https://lexxiikka.github.io/)
