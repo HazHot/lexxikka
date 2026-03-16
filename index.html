@@ -1089,7 +1089,7 @@
                 "До меня дошли слухи, что это я расформировал m.o.r.t.i.s., это правда?",
                 "Лучший работник планеты © FICSIT",
                 "Делу - время, потехе хе хе хе              че ржешь блять",
-                "Лафлейма я буду осуждать долго, а за что - не скажу",
+                //"Лафлейма я буду осуждать долго, а за что - не скажу",
                 "Первый увидивший это творение - мой брат по несчастью",
                 "Музыка: Asper X - Волчок",
                 "Третьего сезона MineLovely не будет",
@@ -1132,6 +1132,10 @@
                     name = names[currentNameIndex];
                 }
                 profileName.textContent = nameText + (nameCursorVisible ? '|' : ' ');
+                if (Math.random() < 0.3) {
+                    profileName.classList.add('glitch');
+                    setTimeout(() => profileName.classList.remove('glitch'), 200);
+                }
                 setTimeout(typeWriterName, isNameDeleting ? 50 : Math.floor(Math.random() * 101) + 30);
             }
             setInterval(() => {
