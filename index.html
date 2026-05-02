@@ -477,7 +477,15 @@
             z-index: 20;
         }
 
-        #results-theme {
+        #status-button-container {
+            position: fixed;
+            right: 2%;
+            bottom: 5%;
+            z-index: 20;
+        }
+
+        #results-theme,
+        #status-theme {
             background: rgba(0, 0, 0, 1);
             color: white;
             border: 1px solid rgba(255, 255, 255, 0.3);
@@ -489,7 +497,8 @@
             transition: all 0.3s;
         }
 
-        #results-theme:hover {
+        #results-theme:hover,
+        #status-theme:hover {
             background: rgba(0, 0, 0, 0.4);
             border-color: rgba(255, 255, 255, 0.8);
         }
@@ -718,6 +727,9 @@
         <div id="results-button-container">
             <button id="results-theme">Жизненные показатели</button>
         </div>
+        <div id="status-button-container">
+            <button id="status-theme">Состояние</button>
+        </div>
         <div class="top-controls">
             <div class="volume-control">
                 <svg id="volume-icon" class="volume-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -774,7 +786,10 @@
                 'assets/telergam_group.png',
                 'assets/discord.png',
                 'assets/youtube.png',
-                'assets/steam.png'
+                'assets/steam.png',
+                'assets/dd_background.mp4',
+                'assets/dd_music.mp3',
+                'assets/dd_profile.png'
             ];
             totalAssets = assetsToLoad.length;
             assetsToLoad.forEach(src => {
@@ -806,6 +821,7 @@
             const visitorCount = document.getElementById('visitor-count');
             const backgroundMusic = document.getElementById('background-music');
             const resultsButton = document.getElementById('results-theme');
+            const statusButton = document.getElementById('status-theme');
             const volumeIcon = document.getElementById('volume-icon');
             const volumeSlider = document.getElementById('volume-slider');
             const glitchOverlay = document.querySelector('.glitch-overlay');
@@ -818,6 +834,7 @@
             const bar5el = document.getElementById('barr5');
             const profilePicture = document.querySelector('.profile-picture');
             const profileContainer = document.querySelector('.profile-container');
+            const backgroundVideo = document.getElementById('background');
             preloadAssets();
             let startTextContent = '';
             let startIndex = 0;
@@ -1196,6 +1213,26 @@
                     });
                     isShowingSkills = false;
                 }
+            });
+
+            let ddModeActivated = false;
+            statusButton.addEventListener('click', () => {
+                if (ddModeActivated) return;
+                ddModeActivated = true;
+                statusButton.innerText = "lexxikka@dzet.su"
+                backgroundVideo.src = 'assets/dd_background.mp4';
+                backgroundVideo.load();
+                backgroundMusic.pause();
+                backgroundMusic.src = 'assets/dd_music.mp3';
+                backgroundMusic.load();
+                backgroundMusic.play()
+                profilePicture.src = 'assets/dd_profile.png';
+                let newBioMess = []
+            });
+
+            statusButton.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                statusButton.click();
             });
         });
     </script>
