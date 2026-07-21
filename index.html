@@ -436,7 +436,45 @@
             text-align: center;
         }
 
-        /* --- КНОПКА ПЕРЕХОДА К ПЛЕЕРУ (БЕЗ БАРЬЕРОВ, ТОЛЬКО ИЗОБРАЖЕНИЕ) --- */
+        /* --- КНОПКА ПЕРЕХОДА К ПЛЕЕРУ (С ОБЁРТКОЙ ДЛЯ ПОДСКАЗКИ) --- */
+        .music-btn-wrapper {
+            position: relative;
+            display: inline-flex;
+        }
+
+        .music-btn-wrapper .music-loading-tooltip {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 35;
+        }
+
+        .music-btn-wrapper .music-loading-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.85) transparent transparent transparent;
+        }
+
+        .music-btn-wrapper .music-loading-tooltip.visible {
+            opacity: 1;
+        }
+
         .more-music-btn {
             background: transparent;
             border: none;
@@ -666,7 +704,7 @@
 
 <body class="home-theme" onload="initMedia()">
     <div id="start-screen">
-        <div id="start-text">Идет подгрузка контента страницы, 0% </div>
+        <div id="start-text">Идет подгрузка контента страницы, 0%</div>
     </div>
     <div class="container">
         <div id="bg-container">
@@ -767,9 +805,12 @@
                     </div>
                 </div>
             </div>
-            <button class="more-music-btn" title="Больше музыки">
-                <img src="assets/player.png" alt="Player">
-            </button>
+            <div class="music-btn-wrapper">
+                <button class="more-music-btn" title="Больше музыки">
+                    <img src="assets/player.png" alt="Player">
+                </button>
+                <span class="music-loading-tooltip" id="music-loading-tooltip">Медиа данного меню ещё загружаются</span>
+            </div>
         </div>
     </div>
 
@@ -811,9 +852,12 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
-        let assetsLoaded = false;
-        let totalAssets = 0;
-        let loadedAssets = 0;
+        let profileAssetsLoaded = false;
+        let musicAssetsLoaded = false;
+        let totalProfileAssets = 0;
+        let loadedProfileAssets = 0;
+        let totalMusicAssets = 0;
+        let loadedMusicAssets = 0;
 
         function initMedia() {
             const backgroundMusic = document.getElementById('background-music');
@@ -825,18 +869,35 @@
             backgroundMusic.volume = 0.3;
         }
 
-        function trackAssetLoad() {
-            loadedAssets++;
-            const loadingPercent = Math.floor((loadedAssets / totalAssets) * 100);
+        function trackProfileAssetLoad() {
+            loadedProfileAssets++;
+            const loadingPercent = Math.floor((loadedProfileAssets / totalProfileAssets) * 100);
             const startText = document.getElementById('start-text');
-            if (startText && !assetsLoaded) {
+            if (startText && !profileAssetsLoaded) {
                 startText.textContent = `Идет подгрузка контента страницы ${loadingPercent}%`;
             }
-            if (loadedAssets >= totalAssets) assetsLoaded = true;
+            if (loadedProfileAssets >= totalProfileAssets) {
+                profileAssetsLoaded = true;
+                startText.textContent = 'Ну же, один клик во имя повелителя. . .';
+                // Start loading music assets in background
+                preloadMusicAssets();
+            }
         }
 
-        function preloadAssets() {
-            const assetsToLoad = [
+        function trackMusicAssetLoad() {
+            loadedMusicAssets++;
+            if (loadedMusicAssets >= totalMusicAssets) {
+                musicAssetsLoaded = true;
+                const tooltip = document.getElementById('music-loading-tooltip');
+                if (tooltip) {
+                    tooltip.classList.remove('visible');
+                    tooltip.classList.add('hidden');
+                }
+            }
+        }
+
+        function preloadProfileAssets() {
+            const profileAssets = [
                 'assets/background.mp4',
                 'assets/music.mp3',
                 'assets/profile.png',
@@ -847,19 +908,39 @@
                 'assets/aal.png',
                 'assets/staff.gif',
                 'assets/telegram.png',
-                'assets/telergam_group.png',
+                'assets/telegram_group.png',
                 'assets/discord.png',
                 'assets/youtube.png',
                 'assets/steam.png',
                 'assets/itd.png',
                 'assets/blog.png',
+                'assets/icon.png'
+            ];
+            totalProfileAssets = profileAssets.length;
+            profileAssets.forEach(src => {
+                if (src.endsWith('.mp4')) {
+                    const video = document.createElement('video');
+                    video.preload = 'auto'; video.src = src;
+                    video.onloadeddata = trackProfileAssetLoad; video.onerror = trackProfileAssetLoad;
+                } else if (src.endsWith('.mp3')) {
+                    const audio = document.createElement('audio');
+                    audio.preload = 'auto'; audio.src = src;
+                    audio.onloadeddata = trackProfileAssetLoad; audio.onerror = trackProfileAssetLoad;
+                } else {
+                    const img = new Image(); img.src = src;
+                    img.onload = trackProfileAssetLoad; img.onerror = trackProfileAssetLoad;
+                }
+            });
+        }
+
+        function preloadMusicAssets() {
+            const musicAssets = [
                 'assets/player.png',
                 'assets/return.png',
                 'assets/play.png',
                 'assets/pause.png',
                 'assets/next.png',
                 'assets/voice.png',
-                'assets/icon.png',
                 'assets/music_1.mp3',
                 'assets/background_1.mp4',
                 'assets/music_2.mp3',
@@ -869,21 +950,21 @@
                 'assets/music_4.mp3',
                 'assets/background_4.mp4',
                 'assets/music_5.mp3',
-                'assets/background_5.mp4'
+                'assets/background_5.mp4',
             ];
-            totalAssets = assetsToLoad.length;
-            assetsToLoad.forEach(src => {
+            totalMusicAssets = musicAssets.length;
+            musicAssets.forEach(src => {
                 if (src.endsWith('.mp4')) {
                     const video = document.createElement('video');
                     video.preload = 'auto'; video.src = src;
-                    video.onloadeddata = trackAssetLoad; video.onerror = trackAssetLoad;
+                    video.onloadeddata = trackMusicAssetLoad; video.onerror = trackMusicAssetLoad;
                 } else if (src.endsWith('.mp3')) {
                     const audio = document.createElement('audio');
                     audio.preload = 'auto'; audio.src = src;
-                    audio.onloadeddata = trackAssetLoad; audio.onerror = trackAssetLoad;
+                    audio.onloadeddata = trackMusicAssetLoad; audio.onerror = trackMusicAssetLoad;
                 } else {
                     const img = new Image(); img.src = src;
-                    img.onload = trackAssetLoad; img.onerror = trackAssetLoad;
+                    img.onload = trackMusicAssetLoad; img.onerror = trackMusicAssetLoad;
                 }
             });
         }
@@ -901,8 +982,9 @@
             const profilePicture = document.querySelector('.profile-picture');
             const profileContainer = document.querySelector('.profile-container');
             const playPauseIcon = document.getElementById('play-pause-icon');
+            const musicLoadingTooltip = document.getElementById('music-loading-tooltip');
 
-            preloadAssets();
+            preloadProfileAssets();
 
             const additionalMusic = [
                 { title: "Влом", artist: "MiatriSs", audio: "assets/music_1.mp3", bg: "assets/background_1.mp4" },
@@ -1125,6 +1207,15 @@
             audio2.addEventListener('ended', handleAudioEnded);
 
             moreMusicBtn.addEventListener('click', () => {
+                // If music assets are not loaded yet, show tooltip and block navigation
+                if (!musicAssetsLoaded) {
+                    musicLoadingTooltip.classList.add('visible');
+                    setTimeout(() => {
+                        musicLoadingTooltip.classList.remove('visible');
+                    }, 2500);
+                    return;
+                }
+
                 bgMusicWasPlaying = !backgroundMusic.paused;
                 backgroundMusic.pause();
                 isMusicMode = true;
@@ -1189,7 +1280,7 @@
 
             function runStartScreenEffect() {
                 const finalMessage = "Ну же, один клик во имя повелителя. . .";
-                if (!assetsLoaded) {
+                if (!profileAssetsLoaded) {
                     typeWriterInterval = setTimeout(runStartScreenEffect, 100);
                 } else if (!typewriterComplete) {
                     if (startIndex <= finalMessage.length) {
@@ -1209,7 +1300,7 @@
             runStartScreenEffect();
 
             startScreen.addEventListener('click', () => {
-                if (!assetsLoaded) return;
+                if (!profileAssetsLoaded) return;
                 clearTimeout(typeWriterInterval);
                 startScreen.classList.add('hidden');
                 backgroundMusic.muted = false;
@@ -1228,7 +1319,7 @@
             });
 
             startScreen.addEventListener('touchstart', (e) => {
-                if (!assetsLoaded || !typewriterComplete) { e.preventDefault(); return; }
+                if (!profileAssetsLoaded || !typewriterComplete) { e.preventDefault(); return; }
                 startScreen.classList.add('hidden');
                 backgroundMusic.muted = false;
                 backgroundMusic.play().catch(err => console.error("Failed to play music:", err));
