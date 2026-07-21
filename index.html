@@ -860,6 +860,39 @@
         let totalMusicAssets = 0;
         let loadedMusicAssets = 0;
 
+        const musicList = [
+            {
+                title: "Чё ты сделаешь",
+                artist: "MiatriSs",
+                audio: "assets/music__MiatriSs__Чё_ты_сделаешь.mp3",
+                bg: "assets/background__MiatriSs__Чё_ты_сделаешь.mp4"
+            },
+            {
+                title: "Каникулы",
+                artist: "BRZ",
+                audio: "assets/music__BRZ__Каникулы.mp3",
+                bg: "assets/background__BRZ__Каникулы.mp4"
+            },
+            {
+                title: "Большие города",
+                artist: "Planya",
+                audio: "assets/music__Planya__Большие_Города.mp3",
+                bg: "assets/background__Planya__Большие_Города.mp4"
+            },
+            {
+                title: "Inferno",
+                artist: "Onsa Media",
+                audio: "assets/music__Onsa_Media__Inferno.mp3",
+                bg: "assets/background__Onsa_Media__Inferno.mp4"
+            },
+            {
+                title: "I",
+                artist: "DEEP-EX-SENSE",
+                audio: "assets/music__DEEP-EX-SENSE__I.mp3",
+                bg: "assets/background__DEEP-EX-SENSE__I.mp4"
+            }
+        ];
+
         function initMedia() {
             const backgroundMusic = document.getElementById('background-music');
             backgroundMusic.src = `assets/music.mp3`;
@@ -942,17 +975,11 @@
                 'assets/pause.png',
                 'assets/next.png',
                 'assets/voice.png',
-                'assets/music_1.mp3',
-                'assets/background_1.mp4',
-                'assets/music_2.mp3',
-                'assets/background_2.mp4',
-                'assets/music_3.mp3',
-                'assets/background_3.mp4',
-                'assets/music_4.mp3',
-                'assets/background_4.mp4',
-                'assets/music_5.mp3',
-                'assets/background_5.mp4',
             ];
+            musicList.forEach(track => {
+                musicAssets.push(track.audio);
+                musicAssets.push(track.bg);
+            });
             totalMusicAssets = musicAssets.length;
             musicAssets.forEach(src => {
                 if (src.endsWith('.mp4')) {
@@ -986,39 +1013,6 @@
             const musicLoadingTooltip = document.getElementById('music-loading-tooltip');
 
             preloadProfileAssets();
-
-            const musicList = [
-                {
-                    title: "Чё ты сделаешь",
-                    artist: "MiatriSs",
-                    audio: "assets/music__MiatriSs__Чё_ты_сделаешь.mp3",
-                    bg: "assets/background__MiatriSs__Чё_ты_сделаешь.mp4"
-                },
-                {
-                    title: "Каникулы",
-                    artist: "BRZ",
-                    audio: "assets/music__BRZ__Каникулы.mp3",
-                    bg: "assets/background__BRZ__Каникулы.mp4"
-                },
-                {
-                    title: "Большие города",
-                    artist: "Planya",
-                    audio: "assets/music__Planya__Большие_Города.mp3",
-                    bg: "assets/background__Planya__Большие_Города.mp4"
-                },
-                {
-                    title: "Inferno",
-                    artist: "Onsa Media",
-                    audio: "assets/music__Onsa_Media__Inferno.mp3",
-                    bg: "assets/background__Onsa_Media__Inferno.mp4"
-                },
-                {
-                    title: "I",
-                    artist: "DEEP-EX-SENSE",
-                    audio: "assets/music__DEEP-EX-SENSE__I.mp3",
-                    bg: "assets/background__DEEP-EX-SENSE__I.mp4"
-                }
-            ];
 
             const bottomControls = document.querySelector('.bottom-controls');
             const moreMusicBtn = document.querySelector('.more-music-btn');
