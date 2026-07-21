@@ -879,7 +879,7 @@
             if (loadedProfileAssets >= totalProfileAssets) {
                 profileAssetsLoaded = true;
                 startText.textContent = 'Ну же, один клик во имя повелителя. . .';
-                // Start loading music assets in background
+                
                 preloadMusicAssets();
             }
         }
@@ -1207,7 +1207,7 @@
             audio2.addEventListener('ended', handleAudioEnded);
 
             moreMusicBtn.addEventListener('click', () => {
-                // If music assets are not loaded yet, show tooltip and block navigation
+                
                 if (!musicAssetsLoaded) {
                     musicLoadingTooltip.classList.add('visible');
                     setTimeout(() => {
