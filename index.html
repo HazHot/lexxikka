@@ -709,7 +709,8 @@
     <div class="container">
         <div id="bg-container">
             <video id="bg-video-1" class="bg-video" autoplay muted loop playsinline preload="auto"></video>
-            <video id="bg-video-2" class="bg-video" autoplay muted loop playsinline preload="auto"style="opacity: 0;"></video>
+            <video id="bg-video-2" class="bg-video" autoplay muted loop playsinline preload="auto"
+                style="opacity: 0;"></video>
         </div>
 
         <div id="profile-block">
@@ -879,7 +880,7 @@
             if (loadedProfileAssets >= totalProfileAssets) {
                 profileAssetsLoaded = true;
                 startText.textContent = 'Ну же, один клик во имя повелителя. . .';
-                
+
                 preloadMusicAssets();
             }
         }
@@ -986,12 +987,37 @@
 
             preloadProfileAssets();
 
-            const additionalMusic = [
-                { title: "Влом", artist: "MiatriSs", audio: "assets/music_1.mp3", bg: "assets/background_1.mp4" },
-                { title: "Каникулы", artist: "BRZ", audio: "assets/music_2.mp3", bg: "assets/background_2.mp4" },
-                { title: "Большие города", artist: "Planya", audio: "assets/music_3.mp3", bg: "assets/background_3.mp4" },
-                { title: "Inferno", artist: "Onsa Media", audio: "assets/music_4.mp3", bg: "assets/background_4.mp4" },
-                { title: "Этот трек ещё не вышел!", artist: "Он будет добавлен 26 июня.", audio: "assets/music_5.mp3", bg: "assets/background_5.mp4" }
+            const musicList = [
+                {
+                    title: "Чё ты сделаешь",
+                    artist: "MiatriSs",
+                    audio: "assets/music__MiatriSs__Чё_ты_сделаешь.mp3",
+                    bg: "assets/background__MiatriSs__Чё_ты_сделаешь.mp4"
+                },
+                {
+                    title: "Каникулы",
+                    artist: "BRZ",
+                    audio: "assets/music__BRZ__Каникулы.mp3",
+                    bg: "assets/background__BRZ__Каникулы.mp4"
+                },
+                {
+                    title: "Большие города",
+                    artist: "Planya",
+                    audio: "assets/music__Planya__Большие_Города.mp3",
+                    bg: "assets/background__Planya__Большие_Города.mp4"
+                },
+                {
+                    title: "Inferno",
+                    artist: "Onsa Media",
+                    audio: "assets/music__Onsa_Media__Inferno.mp3",
+                    bg: "assets/background__Onsa_Media__Inferno.mp4"
+                },
+                {
+                    title: "I",
+                    artist: "DEEP-EX-SENSE",
+                    audio: "assets/music__DEEP-EX-SENSE__I.mp3",
+                    bg: "assets/background__DEEP-EX-SENSE__I.mp4"
+                }
             ];
 
             const bottomControls = document.querySelector('.bottom-controls');
@@ -1142,7 +1168,7 @@
 
                 isCrossfading = true;
                 currentTrackIndex = index;
-                const track = additionalMusic[currentTrackIndex];
+                const track = musicList[currentTrackIndex];
 
                 trackTitleEl.textContent = track.title;
                 trackArtistEl.textContent = track.artist;
@@ -1188,13 +1214,13 @@
 
             function playNext() {
                 let nextIndex = currentTrackIndex + 1;
-                if (nextIndex >= additionalMusic.length) nextIndex = 0;
+                if (nextIndex >= musicList.length) nextIndex = 0;
                 crossfadeToTrack(nextIndex);
             }
 
             function playPrev() {
                 let prevIndex = currentTrackIndex - 1;
-                if (prevIndex < 0) prevIndex = additionalMusic.length - 1;
+                if (prevIndex < 0) prevIndex = musicList.length - 1;
                 crossfadeToTrack(prevIndex);
             }
 
@@ -1207,7 +1233,7 @@
             audio2.addEventListener('ended', handleAudioEnded);
 
             moreMusicBtn.addEventListener('click', () => {
-                
+
                 if (!musicAssetsLoaded) {
                     musicLoadingTooltip.classList.add('visible');
                     setTimeout(() => {
@@ -1343,10 +1369,10 @@
             initializeVisitorCounter(); setInterval(initializeVisitorCounter, 60);
 
             const names = [
-                "✨ Lexxikka", 
-                "⚰️ Агнец", 
-                "💬 potentate", 
-                "👑 Lex", 
+                "✨ Lexxikka",
+                "⚰️ Агнец",
+                "💬 potentate",
+                "👑 Lex",
                 "🛠️ HazHot"
             ];
             const quotes = [
