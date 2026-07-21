@@ -1349,7 +1349,7 @@
                 "👑 Lex", 
                 "🛠️ HazHot"
             ];
-            const bioMessages = [
+            const quotes = [
                 "Чтож с чего бы мне лучше начать?",
                 "Нимб не подходит к          рогам.",
                 //"Мой запах, стопроцентный кортизол",
@@ -1399,10 +1399,10 @@
 
             let bioText = ''; let bioIndex = 0; let bioMessageIndex = 0; let isBioDeleting = false; let bioCursorVisible = true;
             function typeWriterBio() {
-                if (!isBioDeleting && bioIndex < bioMessages[bioMessageIndex].length) { bioText = bioMessages[bioMessageIndex].slice(0, bioIndex + 1); bioIndex++; }
-                else if (isBioDeleting && bioIndex > 0) { bioText = bioMessages[bioMessageIndex].slice(0, bioIndex - 1); bioIndex--; }
-                else if (bioIndex === bioMessages[bioMessageIndex].length) { isBioDeleting = true; setTimeout(typeWriterBio, 2000); return; }
-                else if (bioIndex === 0 && isBioDeleting) { isBioDeleting = false; bioMessageIndex = (bioMessageIndex + 1) % bioMessages.length; }
+                if (!isBioDeleting && bioIndex < quotes[bioMessageIndex].length) { bioText = quotes[bioMessageIndex].slice(0, bioIndex + 1); bioIndex++; }
+                else if (isBioDeleting && bioIndex > 0) { bioText = quotes[bioMessageIndex].slice(0, bioIndex - 1); bioIndex--; }
+                else if (bioIndex === quotes[bioMessageIndex].length) { isBioDeleting = true; setTimeout(typeWriterBio, 2000); return; }
+                else if (bioIndex === 0 && isBioDeleting) { isBioDeleting = false; bioMessageIndex = (bioMessageIndex + 1) % quotes.length; }
                 profileBio.textContent = bioText + (bioCursorVisible ? '|' : ' ');
                 if (Math.random() < 0.1) { profileBio.classList.add('glitch'); setTimeout(() => profileBio.classList.remove('glitch'), 200); }
                 setTimeout(typeWriterBio, isBioDeleting ? 20 : Math.floor(Math.random() * 101) + 30);
