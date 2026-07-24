@@ -702,7 +702,7 @@
     </style>
 </head>
 
-<body class="home-theme" onload="initMedia()">
+<body class="home-theme">
     <div id="start-screen">
         <div id="start-text">Идет подгрузка контента страницы, 0%</div>
     </div>
@@ -947,7 +947,9 @@
                 console.error("Media elements not found");
                 return;
             }
-            backgroundMusic.src = `assets/music.mp3`;
+            if (!backgroundMusic.src || backgroundMusic.src === window.location.href) {
+                backgroundMusic.src = 'assets/music.mp3';
+            }
             backgroundMusic.volume = 0.3;
         }
 
@@ -1075,6 +1077,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            initMedia();
             const startScreen = document.getElementById('start-screen');
             const startText = document.getElementById('start-text');
             const profileName = document.getElementById('profile-name');
