@@ -943,11 +943,11 @@
 
         function initMedia() {
             const backgroundMusic = document.getElementById('background-music');
-            backgroundMusic.src = `assets/music.mp3`;
             if (!backgroundMusic) {
                 console.error("Media elements not found");
                 return;
             }
+            backgroundMusic.src = `assets/music.mp3`;
             backgroundMusic.volume = 0.3;
         }
 
@@ -1000,15 +1000,27 @@
                 'assets/icon.png'
             ];
             totalProfileAssets = profileAssets.length;
+            const preloadContainer = document.createElement('div');
+            preloadContainer.style.display = 'none';
+            preloadContainer.id = 'preload-container';
+            document.body.appendChild(preloadContainer);
+
             profileAssets.forEach(src => {
                 if (src.endsWith('.mp4')) {
                     const video = document.createElement('video');
-                    video.preload = 'auto'; video.src = src;
-                    video.onloadeddata = trackProfileAssetLoad; video.onerror = trackProfileAssetLoad;
+                    video.preload = 'auto';
+                    video.muted = true;
+                    video.src = src;
+                    video.onloadeddata = trackProfileAssetLoad;
+                    video.onerror = trackProfileAssetLoad;
+                    preloadContainer.appendChild(video);
                 } else if (src.endsWith('.mp3')) {
                     const audio = document.createElement('audio');
-                    audio.preload = 'auto'; audio.src = src;
-                    audio.onloadeddata = trackProfileAssetLoad; audio.onerror = trackProfileAssetLoad;
+                    audio.preload = 'auto';
+                    audio.src = src;
+                    audio.onloadeddata = trackProfileAssetLoad;
+                    audio.onerror = trackProfileAssetLoad;
+                    preloadContainer.appendChild(audio);
                 } else {
                     const img = new Image(); img.src = src;
                     img.onload = trackProfileAssetLoad; img.onerror = trackProfileAssetLoad;
@@ -1030,15 +1042,31 @@
                 musicAssets.push(track.bg);
             });
             totalMusicAssets = musicAssets.length;
+
+            let preloadContainer = document.getElementById('preload-container');
+            if (!preloadContainer) {
+                preloadContainer = document.createElement('div');
+                preloadContainer.style.display = 'none';
+                preloadContainer.id = 'preload-container';
+                document.body.appendChild(preloadContainer);
+            }
+
             musicAssets.forEach(src => {
                 if (src.endsWith('.mp4')) {
                     const video = document.createElement('video');
-                    video.preload = 'auto'; video.src = src;
-                    video.onloadeddata = trackMusicAssetLoad; video.onerror = trackMusicAssetLoad;
+                    video.preload = 'auto';
+                    video.muted = true;
+                    video.src = src;
+                    video.onloadeddata = trackMusicAssetLoad;
+                    video.onerror = trackMusicAssetLoad;
+                    preloadContainer.appendChild(video);
                 } else if (src.endsWith('.mp3')) {
                     const audio = document.createElement('audio');
-                    audio.preload = 'auto'; audio.src = src;
-                    audio.onloadeddata = trackMusicAssetLoad; audio.onerror = trackMusicAssetLoad;
+                    audio.preload = 'auto';
+                    audio.src = src;
+                    audio.onloadeddata = trackMusicAssetLoad;
+                    audio.onerror = trackMusicAssetLoad;
+                    preloadContainer.appendChild(audio);
                 } else {
                     const img = new Image(); img.src = src;
                     img.onload = trackMusicAssetLoad; img.onerror = trackMusicAssetLoad;
@@ -1090,6 +1118,8 @@
                 activeBg.style.opacity = '0';
 
                 activeBg.pause();
+                activeBg.removeAttribute('src');
+                activeBg.load();
                 const temp = activeBg;
                 activeBg = nextBg;
                 nextBg = temp;
@@ -1140,6 +1170,8 @@
                         bgTransitionTimer = null;
 
                         activeBg.pause();
+                        activeBg.removeAttribute('src');
+                        activeBg.load();
                         const temp = activeBg;
                         activeBg = nextBg;
                         nextBg = temp;
@@ -1326,7 +1358,10 @@
                         y: 0, duration: 0.8, ease: 'power2.inOut',
                         onComplete: () => {
                             isMusicMode = false;
-                            if (bgMusicWasPlaying) backgroundMusic.play().catch(() => { });
+                            if (bgMusicWasPlaying) {
+                                backgroundMusic.currentTime = 0;
+                                backgroundMusic.play().catch(() => { });
+                            }
                         }
                     });
                 }, 400);
@@ -1365,11 +1400,12 @@
             }
             runStartScreenEffect();
 
-            startScreen.addEventListener('click', () => {
+            function handleStartScreenClick() {
                 if (!profileAssetsLoaded) return;
                 clearTimeout(typeWriterInterval);
                 startScreen.classList.add('hidden');
                 backgroundMusic.muted = false;
+                backgroundMusic.currentTime = 0;
                 backgroundMusic.play().catch(err => console.error("Failed to play music:", err));
                 profileBlock.classList.remove('hidden');
                 gsap.fromTo(profileBlock,
@@ -1382,24 +1418,13 @@
                     }
                 );
                 typeWriterName(); typeWriterBio();
-            });
+            }
+
+            startScreen.addEventListener('click', handleStartScreenClick);
 
             startScreen.addEventListener('touchstart', (e) => {
                 if (!profileAssetsLoaded || !typewriterComplete) { e.preventDefault(); return; }
-                startScreen.classList.add('hidden');
-                backgroundMusic.muted = false;
-                backgroundMusic.play().catch(err => console.error("Failed to play music:", err));
-                profileBlock.classList.remove('hidden');
-                gsap.fromTo(profileBlock,
-                    { opacity: 0, y: -50 },
-                    {
-                        opacity: 1, y: 0, duration: 1, ease: 'power2.out', onComplete: () => {
-                            profileBlock.classList.add('profile-appear');
-                            profileContainer.classList.add('orbit');
-                        }
-                    }
-                );
-                typeWriterName(); typeWriterBio();
+                handleStartScreenClick();
             });
 
             function initializeVisitorCounter() {
