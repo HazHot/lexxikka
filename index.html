@@ -866,10 +866,10 @@
                 bg: "assets/background__MiatriSs__Чё_ты_сделаешь.mp4"
             },
             {
-                title: "Каникулы",
-                artist: "BRZ",
-                audio: "assets/music__BRZ__Каникулы.mp3",
-                bg: "assets/background__BRZ__Каникулы.mp4"
+                title: "Человек бензопила",
+                artist: "WarVoid & KarVoil",
+                audio: "assets/music__WarVoid__Человек_бензопила.mp3",
+                bg: "assets/background__WarVoid__Человек_бензопила.mp4"
             },
             {
                 title: "Незнакомы",
@@ -948,7 +948,7 @@
                 return;
             }
             if (!backgroundMusic.src || backgroundMusic.src === window.location.href) {
-                backgroundMusic.src = 'assets/music.mp3';
+                backgroundMusic.src = 'assets/music_main.mp3';
             }
             backgroundMusic.volume = 0.3;
         }
@@ -983,7 +983,7 @@
         function preloadProfileAssets() {
             const profileAssets = [
                 'assets/background.mp4',
-                'assets/music.mp3',
+                'assets/music_main.mp3',
                 'assets/profile.png',
                 'assets/developer.png',
                 'assets/1c.png',
